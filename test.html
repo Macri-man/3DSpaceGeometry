@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <title>WebGL Test</title>
+  <meta charset="utf-8"></meta>
+  <style type="text/css">
+html, body {
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 0px;
+  padding: 0px;
+};
+canvas {
+  width: 100%;
+  height: 100%;
+};
+  </style>
+  <script type="text/javascript" src="GLMATH.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.21.0.css">
+  <script src="http://code.jquery.com/qunit/qunit-1.21.0.js"></script>
+  <script src="https://raw.githubusercontent.com/JamesMGreene/qunit-assert-close/master/qunit-assert-close.js"></script>
+  <script type="text/javascript">
+  QUnit.test("Matrix multiplication", testmat4Mult);
+  QUnit.test("Matrix transposition", testmat4Transpose);
+  QUnit.test("Trig functions", testTrig);
+  QUnit.test("Transformations", testTransformations);
+  </script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+</body>
+</html>

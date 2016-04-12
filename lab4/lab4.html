@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+    precision mediump float;
+    attribute vec4 vertexPosition;
+    //attribute vec3 nv;
+
+  /*  uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+
+    uniform lightPos;*/
+
+  /*  varying vec3 nf;
+    varying vec3 lightVec;
+    varying vec3 cameraVec;
+*/
+
+    void main() {
+        gl_PointSize = 1.0;
+        //gl_Position = projection * view * model * vertexPosition;
+        gl_Position = vertexPosition;
+
+      //  lightVec = normalize( pos - lightPos.xyz );
+
+    //    cameraVec = -normalize(vertexPosition.xyz);
+
+    //    nf=nv;
+
+    }
+
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+    precision mediump float;
+/*
+    uniform vec4 AmbIntense;
+    uniform vec4 DiffuseIntense;
+    uniform vec4 SpecularIntense;
+
+    uniform float matShine;
+
+    uniform vec4 AmbMat;
+    uniform vec4 DiffuseMat;
+    uniform vec4 SpecularMat;
+
+    varying vec3 nf;
+    varying vec3 lightVec;
+    varying vec3 cameraVec;
+
+    vec4 ambientReflection(){
+       return AmbMat * AmbIntense;
+    }
+
+    vec4 diffuseReflection(vec3 N,vec3 L){
+        //float attenuation = 1.0/(0.05+0.05*d+0.01*d*d);
+        float dTerm = max(dot(N, L),0.0);
+        return  DiffuseMat * Intense * dTerm;
+    }
+
+    vec4 specularReflection(vec3 N,vec3 L,vec3 V){
+          // half vector
+          vec3 H = normalize(L + V);
+          float sTerm =  max((pow(dot(N, H), matShine)),0.0);
+       return SpecularMat * SpecularIntense * sTerm;
+    }
+
+    void main() {
+
+        vec3 L = normalize(lightVec).xyz;
+        vec3 V = normalize(cameraVec).xyz;
+        vec3 N = normalize(normals).xyz;
+
+        vec4 Iamb = ambientReflection();
+        vec4 Idif = diffuseReflection(N, L);
+        vec4 Ispe = specularReflection(N, L, V);
+
+        gl_FragColor = Iamb + Idif + Ispe;
+    }*/
+      void main() {
+        gl_FragColor = vec4(1.0,1.0,1.0,1.0);
+      }
+
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="../GLMATH.js"></script>
+<script type="text/javascript" src="lab4.js"></script>
+<script type="text/javascript" src="object.js"></script>
+</head>
+
+<body onload = "initGL()">
+    <canvas id="gl-canvas" height="512" width="512"></canvas>
+    <br/>
+    <button onclick="Orthographic()"> Orthographic </button>
+    <button onclick="Perspective()"> Perspective </button>
+    <br/>
+    <button onclick="Light1()"> Toggle Light 1 </button>
+    <button onclick="Light2()"> Toggle Light 2 </button>
+
+    <input id="slidex" type="range" min="-10" max="10" step=".2" value="0"/>
+    <input id="slidey" type="range" min="-10" max="10" step=".2" value="0"/>
+    <input id="slidez" type="range" min="-10" max="10" step=".2" value="0"/>
+</body>
+</html>

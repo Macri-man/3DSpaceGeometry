@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+    precision mediump float;
+    attribute vec4 vertexPosition;
+    attribute vec3 nv;
+
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+
+    uniform vec3 lightPos;
+
+    uniform vec3 Ia, Id, Is;
+
+    varying vec3 Ia_pp0, Id_pp0, Is_pp0;
+
+    varying vec3 i, v;
+
+    varying vec3 n;
+
+    void main() {
+
+
+        float distance = length(vertexPosition.xyz-lightPos);
+
+        //Ia_pp0 = Ia / (distance*distance);
+        Ia_pp0 = Ia;
+        //Id_pp0 = Id / (distance*distance);
+        Id_pp0 = Id;
+        //Is_pp0 = Is / (distance*distance);
+        Is_pp0 = Is;
+
+        n=nv;
+
+        i = normalize(lightPos - vertexPosition.xyz);
+
+        v = normalize(vec3(0.0,0.0,0.0) - vertexPosition.xyz);
+
+        gl_PointSize = 1.0;
+        gl_Position = projection * view * model * vertexPosition;
+        //gl_Position = vertexPosition;
+
+    }
+
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+    precision mediump float;
+
+    uniform vec3 ka,kd,ks;
+
+    uniform float alpha;
+
+    varying vec3 Ia_pp0, Id_pp0, Is_pp0;
+
+    varying vec3 i, v;
+
+    varying vec3 n;
+
+    vec3 R;
+
+    void main() {
+
+
+      vec3 i_renorm, r_renorm, v_renorm, n_renorm;
+
+      i_renorm = normalize(i);
+      v_renorm = normalize(v);
+      n_renorm = normalize(n);
+
+      vec3 Ra, Rd, Rs;
+
+      Ra = ka * Ia_pp0;
+
+      Rd = kd * Id_pp0 * max( dot(i_renorm,n_renorm) ,0.0);
+
+      vec3 r = normalize(2.0 * dot(i_renorm,n_renorm) * n_renorm - i_renorm);
+
+      Rs = ks * Is_pp0 * pow( max( dot(r,v_renorm) , 0.0) , alpha) * floor(0.5 * ( sign( dot(i_renorm,n_renorm) + 1.0) ));
+
+      R = clamp(Ra+Rd+Rs,0.0,1.0);
+
+      //gl_FragColor = vec4( R.r, R.g, R.b, 1.0 );
+
+      //gl_FragColor = vec4( 1.0,1.0,1.0, 1.0 );
+      gl_FragColor = vec4(Ra.r,Ra.g,Ra.b,1.0);
+    }
+
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="../GLMATH.js"></script>
+<script type="text/javascript" src="lab4simpler.js"></script>
+<script type="text/javascript" src="object.js"></script>
+</head>
+
+<body onload = "initGL()">
+    <canvas id="gl-canvas" height="512" width="512">
+    </canvas>
+
+    <br/>
+    <button onclick="Orthographic()"> Orthographic </button>
+    <button onclick="Perspective()"> Perspective </button>
+    <br/>
+    <button onclick="Light1()"> Toggle Light 1 </button>
+    <button onclick="Light2()"> Toggle Light 2 </button>
+
+    <input id="slidex" type="range" min="-40" max="40" step="1" value="0"/>
+    <input id="slidey" type="range" min="-40" max="40" step="1" value="0"/>
+    <input id="slidez" type="range" min="-40" max="40" step="1" value="0"/>
+
+    <br/>
+    <input id="fov" type="range" min="-100" max="100" step="1" value="65"/>
+    <input id="near" type="range" min="-100" max="100" step="1" value="-100"/>
+    <input id="far" type="range" min="-100" max="100" step="1" value="100"/>
+</body>
+</html>
